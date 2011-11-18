@@ -1,6 +1,6 @@
 <?php
 require 'libs/Smarty.class.php';
-define('SMARTY_ROOT', '.');
+define('SMARTY_ROOT', '/includes/smarty');
 $smarty = new Smarty();
 
 $smarty->template_dir = '../templates';
