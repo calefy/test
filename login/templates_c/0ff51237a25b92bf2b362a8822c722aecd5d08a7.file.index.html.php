@@ -1,29 +1,29 @@
-<?php /* Smarty version Smarty-3.1.5, created on 2011-11-18 15:53:52
-         compiled from "templates\index.html" */ ?>
-<?php /*%%SmartyHeaderCode:54054ec51f60328233-71447906%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /* Smarty version Smarty-3.1.5, created on 2011-11-17 16:40:49
+         compiled from "../templates\index.html" */ ?>
+<?php /*%%SmartyHeaderCode:231304ec527a36bb618-61319280%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
-    '4168cf2c7dda6b349f352305cbbe4c65600adad2' => 
+    '0ff51237a25b92bf2b362a8822c722aecd5d08a7' => 
     array (
-      0 => 'templates\\index.html',
-      1 => 1321544901,
+      0 => '../templates\\index.html',
+      1 => 1321544434,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '54054ec51f60328233-71447906',
+  'nocache_hash' => '231304ec527a36bb618-61319280',
   'function' => 
   array (
   ),
   'version' => 'Smarty-3.1.5',
-  'unifunc' => 'content_4ec51f60394a4',
+  'unifunc' => 'content_4ec527a3733fe',
   'variables' => 
   array (
     'acount' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_4ec51f60394a4')) {function content_4ec51f60394a4($_smarty_tpl) {?><?php echo $_smarty_tpl->getSubTemplate ("head/head.html", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
+<?php if ($_valid && !is_callable('content_4ec527a3733fe')) {function content_4ec527a3733fe($_smarty_tpl) {?><?php echo $_smarty_tpl->getSubTemplate ("head/head.html", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
 
 
 <h2>用户登录</h2>

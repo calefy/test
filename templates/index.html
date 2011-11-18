@@ -1,0 +1,26 @@
+{{include file="head/head.html"}}
+
+<h2>用户登录</h2>
+<hr />
+<form action="/login/login.php" method="post">
+	<fieldset>
+		<legend>用户登录</legend>
+		<div>
+			<p>
+				<label for="acount">账号：</label>
+				<input type="text" id="acount" name="acount" value="{{$acount|default:''}}" />
+			</p>
+			<p>
+				<label for="password">密码：</label>
+				<input type="password" id="password" name="password" />
+			</p>
+			<div>
+				<input type="submit" value="登录" />
+				<input type="reset" value="重置" />
+				<span class="error">密码错误</span>
+			</div>
+		</div>
+	</fieldset>
+</form>
+
+{{include file="foot/foot.html"}}
