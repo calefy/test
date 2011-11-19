@@ -1,8 +1,9 @@
 <?php
-include('includes/smarty/main.php');
+require_once('./includes/common/CSmarty.php');
 
 //如果未登录
-$smarty->assign('title', 'test title');
-$smarty->display('templates/index.html');
+$smarty = new CSmarty();
+$smarty->assign('title', 'test title index');
+$smarty->display('index.html');
 
 ?>
