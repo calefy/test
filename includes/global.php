@@ -1,5 +1,7 @@
 <?php
 
-require_once './common/CSmarty.php';
+function __autoload($class){
+	require_once( "classes/$class.class.php" );
+}
 
 ?>
