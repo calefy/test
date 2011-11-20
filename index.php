@@ -1,9 +1,16 @@
 <?php
+session_start();
 require_once('./includes/common/CSmarty.php');
 
-//如果未登录
 $smarty = new CSmarty();
-$smarty->assign('title', 'test title index');
-$smarty->display('index.html');
+
+if( isset($_SESSION['user']) ){
+	$smarty->assign('user', $_SESSION['user']);
+	$smarty->assign('title', '欢迎');
+	$smarty->display('index.html');
+}else{
+	$smarty->assign('title', '欢迎进入Military');
+	$smarty->display('welcom.html');
+}
 
 ?>

@@ -6,8 +6,10 @@ $db = new CDatabase();
 
 $sql = "
 		CREATE TABLE IF NOT EXISTS m_user(
-			uid int NOT NULL default '0',
+			uid int primary key auto_increment,
 			account varchar(128) NOT NULL default '',
+			password varchar(128) NOT NULL default '',
+			email varchar(128) NOT NULL default '',
 			username varchar(128) NOT NULL default '',
 			fullname varchar(128) NOT NULL default '',
 			gender tinyint NOT NULL default '0',
@@ -19,7 +21,6 @@ $sql = "
 			ctime timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			itime timestamp NOT NULL default '0000-00-00 00:00:00',
 			ltime timestamp NOT NULL default '0000-00-00 00:00:00',
-			PRIMARY KEY (uid),
 			KEY(itime),
 			KEY(ltime)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8

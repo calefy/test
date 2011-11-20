@@ -1,0 +1,26 @@
+<form action="/login/login.php" method="post" class="ui_form">
+	<fieldset>
+		<legend>用户登录</legend>
+		<div>
+			<p class="row">
+				<label for="account">账号：</label>
+				<input type="text" id="account" name="account" value="{{$data.account|default:''}}" />
+			</p>
+			<p class="row">
+				<label for="password">密码：</label>
+				<input type="password" id="password" name="password" />
+			</p>
+			<div class="retract">
+				<P>
+					<input type="submit" value="登录" />
+					<input type="reset" value="重置" />
+					<a href="/reg/reg.php">还没有账户？点击注册</a>
+				</p>
+				{{if isset($error)}}
+				<p class="error">{{$error}}</p>
+				{{/if}}
+			</div>
+		</div>
+	</fieldset>
+</form>
+
