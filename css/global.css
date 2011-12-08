@@ -1,6 +1,11 @@
 @charset "utf-8";
 
-body{background-color:#efefef;}
+body{background-color:#fefefe;
+	-webkit-text-shadow:0 1px 0 rgba(255,255,255,0.8);-moz-text-shadow:0 1px 0 rgba(255,255,255,0.8);text-shadow:0 1px 0 rgba(255,255,255,0.8);}
+
+.header{padding:10px;background-color:#f6f6f6;border-bottom:1px solid #eaeaea;}
+.content{min-height:300px;_height:300px;}
+.footer{padding:15px 10px 30px;border-top:1px solid #eaeaea;}
 
 .ui_form label{width:100px;text-align:right;display:inline-block;zoom:1;}
 .ui_form .row{}
