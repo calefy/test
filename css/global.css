@@ -1,11 +1,15 @@
 @charset "utf-8";
+body,h1,h2,h3,h4,h5,form,img,p{margin:0;padding:0;}
+body{background-color:#f1f1f1;}
 
-body{background-color:#fefefe;
-	-webkit-text-shadow:0 1px 0 rgba(255,255,255,0.8);-moz-text-shadow:0 1px 0 rgba(255,255,255,0.8);text-shadow:0 1px 0 rgba(255,255,255,0.8);}
+a{color:#2b4463;text-decoration:none;}
+a:hover{color:#fcc;text-decoration:underline;}
 
-.header{padding:10px;background-color:#f6f6f6;border-bottom:1px solid #eaeaea;}
+.header,.content,.footer{width:950px;padding-left:25px;padding-right:25px;margin:0 auto;}
+.header{padding-top:10px;padding-bottom:10px;background-color:#f6f6f6;border-bottom:1px solid #eaeaea;
+	-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.2);-moz-box-shadow:0 1px 3px rgba(0,0,0,0.2);box-shadow:0 1px 3px rgba(0,0,0,0.2);}
 .content{min-height:300px;_height:300px;}
-.footer{padding:15px 10px 30px;border-top:1px solid #eaeaea;}
+.footer{padding-top:15px;padding-bottom:30px;border-top:1px solid #eaeaea;}
 
 .ui_form label{width:100px;text-align:right;display:inline-block;zoom:1;}
 .ui_form .row{}
