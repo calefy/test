@@ -18,12 +18,13 @@ class PersonInfo{
 		$this->smarty->assign('title', '详细信息填写');
 		$this->smarty->display( 'pinfo/index.html' );
 	}
-	function goto_index(){
+	function goto_display(){
 		$this->smarty->assign('title', '详细信息');
 		$this->smarty->display( 'pinfo/display.html' );
 	}
 	
 	function goto_submit(){
+		
 		//提取表单数据
 		$this->form_data = array(
 			'account' => $_POST['account'],
@@ -52,7 +53,7 @@ class PersonInfo{
 							'email' => $this->form_data['email'],
 							'password' => $this->form_data['password'],
 						);
-						$this->goto_index();
+						$this->goto_display();
 						$rs->free();
 					}else{
 						$error = '插入数据库操作出错，请稍后重试。';
@@ -69,6 +70,22 @@ class PersonInfo{
 			$this->goto_form();
 		}
 		
+	}
+	/* 基本信息提交 */
+	function submit_base(){
+
+	}
+	/* 入伍前信息提交 */
+	function submit_before(){
+
+	}
+	/* 入伍后信息提交 */
+	function submit_after(){
+
+	}
+	/* 其他信息提交 */
+	function submit_other(){
+
 	}
 }
 

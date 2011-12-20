@@ -1,123 +1,141 @@
 <form class="ui_form" action="/pinfo/index.php">
-	<h3>基本信息</h3>
-	<ul>
-		<li class="row">
-			<div class="label">姓名</div>
-			<div class="cnt"><input type="text" name="bname"/></div>
-		</li>
-		<li class="row">
-			<div class="label">民族</div>
-			<div class="cnt"><input type="text" name="bminzu"/></div>
-		</li>
-		<li class="row">
-			<div class="label">现部职别</div>
-			<div class="cnt"><input type="text" name="bzhibie"/></div>
-		</li>
-		<li class="row">
-			<div class="label">出生年月</div>
-			<div class="cnt"><input type="text" name="bshengri"/></div>
-		</li>
-		<li class="row">
-			<div class="label">入伍年月</div>
-			<div class="cnt"><input type="text" name="bruwu"/></div>
-		</li>
-		<li class="row">
-			<div class="label">入党（团）时间</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">文化程度</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">居民身份证号码</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-	</ul>
-	<h3>入伍前信息</h3>
-	<ul>
-		<li class="row">
-			<div class="label">入伍前毕业学校</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">专业</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">学校地址</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">在校奖惩情况</div>
-			<div class="cnt"><textarea></textarea></div>
-		</li>
-	</ul>
-	<h3>入伍后信息</h3>
-	<ul>
-		<li class="row">
-			<div class="label">任骨干时间</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">岗位</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">入伍后奖惩情况</div>
-			<div class="cnt"><textarea></textarea></div>
-		</li>
-		<li class="row">
-			<div class="label">参加比武情况</div>
-			<div class="cnt"><textarea></textarea></div>
-		</li>
-		<li class="row">
-			<div class="label">最好成绩</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">参与演习情况</div>
-			<div class="cnt"><textarea></textarea></div>
-		</li>
-		<li class="row">
-			<div class="label">入伍后受训情况</div>
-			<div class="cnt"><textarea></textarea></div>
-		</li>
-	</ul>
-	<h3>其它信息</h3>
-	<ul>
-		<li class="row">
-			<div class="label">部队联系地址</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">联系电话</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">家庭成员</div>
-			<div class="cnt"><textarea></textarea></div>
-		</li>
-		<li class="row">
-			<div class="label">家庭联系地址</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">家庭联系电话</div>
-			<div class="cnt"><input type="text"/></div>
-		</li>
-		<li class="row">
-			<div class="label">家庭成员身体健康情况</div>
-			<div class="cnt"><textarea></textarea></div>
-		</li>
-		<li class="row">
-			<div class="label">特长</div>
-			<div class="cnt"><textarea></textarea></div>
-		</li>
-		<li class="row">
-			<div class="label">在样培训期间有何目标</div>
-			<div class="cnt"><textarea></textarea></div>
-		</li>
+	<div>
+		<h3>基本信息</h3>
+		<ul>
+			<li class="row">
+				<div class="label">姓名</div>
+				<div class="cnt"><input type="text" name="bname"/></div>
+			</li>
+			<li class="row">
+				<div class="label">民族</div>
+				<div class="cnt"><input type="text" name="bminzu"/></div>
+			</li>
+			<li class="row">
+				<div class="label">现部职别</div>
+				<div class="cnt"><input type="text" name="bzhibie"/></div>
+			</li>
+			<li class="row">
+				<div class="label">出生年月</div>
+				<div class="cnt"><input type="text" name="bshengri"/></div>
+			</li>
+			<li class="row">
+				<div class="label">入伍年月</div>
+				<div class="cnt"><input type="text" name="bruwu"/></div>
+			</li>
+			<li class="row">
+				<div class="label">入党（团）时间</div>
+				<div class="cnt"><input type="text" name="brudangtuan"//></div>
+			</li>
+			<li class="row">
+				<div class="label">文化程度</div>
+				<div class="cnt"><input type="text" name="bwenhua"/></div>
+			</li>
+			<li class="row">
+				<div class="label">居民身份证号码</div>
+				<div class="cnt"><input type="text" name="bidentifycode"/></div>
+			</li>
+		</ul>
+		<div><input type="submit" value="保存" name="submit_base"/></div>
+	</div>
+</form>
+<form class="ui_form" action="/pinfo/index.php">
+	<div>
+		<h3>入伍前信息</h3>
+		<ul>
+			<li class="row">
+				<div class="label">入伍前毕业学校</div>
+				<div class="cnt"><input type="text" name="fxuexiao"/></div>
+			</li>
+			<li class="row">
+				<div class="label">专业</div>
+				<div class="cnt"><input type="text" name="fzhuanye"/></div>
+			</li>
+			<li class="row">
+				<div class="label">学校地址</div>
+				<div class="cnt"><input type="text" name="fxuexiaodizhi"/></div>
+			</li>
+			<li class="row">
+				<div class="label">在校奖惩情况</div>
+				<div class="cnt"><textarea name="fjiangcheng"></textarea></div>
+			</li>
+		</ul>
+		<div><input type="submit" value="保存" name="submit_before"/></div>
+	</div>
+</form>
+<form class="ui_form" action="/pinfo/index.php">
+	<div>
+		<h3>入伍后信息</h3>
+		<ul>
+			<li class="row">
+				<div class="label">任骨干时间</div>
+				<div class="cnt"><input type="text" name="agugan"/></div>
+			</li>
+			<li class="row">
+				<div class="label">岗位</div>
+				<div class="cnt"><input type="text" name="agangwei"/></div>
+			</li>
+			<li class="row">
+				<div class="label">入伍后奖惩情况</div>
+				<div class="cnt"><textarea name="ajiangcheng"></textarea></div>
+			</li>
+			<li class="row">
+				<div class="label">参加比武情况</div>
+				<div class="cnt"><textarea name="abiwu"></textarea></div>
+			</li>
+			<li class="row">
+				<div class="label">最好成绩</div>
+				<div class="cnt"><input type="text" name="achengji"/></div>
+			</li>
+			<li class="row">
+				<div class="label">参与演习情况</div>
+				<div class="cnt"><textarea name="ayanxi"></textarea></div>
+			</li>
+			<li class="row">
+				<div class="label">入伍后受训情况</div>
+				<div class="cnt"><textarea name="ashouxun"></textarea></div>
+			</li>
+		</ul>
+		<div><input type="submit" value="保存" name="submit_after"/></div>
+	</div>
+</form>
+<form class="ui_form" action="/pinfo/index.php">
+	<div>
+		<h3>其它信息</h3>
+		<ul>
+			<li class="row">
+				<div class="label">部队联系地址</div>
+				<div class="cnt"><input type="text" name="obudui"/></div>
+			</li>
+			<li class="row">
+				<div class="label">联系电话</div>
+				<div class="cnt"><input type="text" name="ophone"/></div>
+			</li>
+			<li class="row">
+				<div class="label">家庭成员</div>
+				<div class="cnt"><textarea name="ofamily"></textarea></div>
+			</li>
+			<li class="row">
+				<div class="label">家庭联系地址</div>
+				<div class="cnt"><input type="text" name="ofamilydizhi"/></div>
+			</li>
+			<li class="row">
+				<div class="label">家庭联系电话</div>
+				<div class="cnt"><input type="text" name="ofamilyphone"/></div>
+			</li>
+			<li class="row">
+				<div class="label">家庭成员身体健康情况</div>
+				<div class="cnt"><textarea name="ofamilyhealth"></textarea></div>
+			</li>
+			<li class="row">
+				<div class="label">特长</div>
+				<div class="cnt"><textarea name="otechang"></textarea></div>
+			</li>
+			<li class="row">
+				<div class="label">在样培训期间有何目标</div>
+				<div class="cnt"><textarea name="omubiao"></textarea></div>
+			</li>
 
-	</ul>
+		</ul>
+		<div><input type="submit" value="保存" name="submit_other"/></div>
+	</div>
 </form>
