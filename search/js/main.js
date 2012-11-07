@@ -211,9 +211,11 @@
 
 			if (evt.preventDefault) {
 				evt.preventDefault();
+				evt.stopPropagation();
 			}
 			else {
 				evt.returnValue = false;
+				evt.cancelBubble = true;
 			}
 		},
 		showList: function () {
