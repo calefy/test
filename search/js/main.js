@@ -103,11 +103,11 @@
 			if (this.dom.list) {
 				addEvent(this.dom.input, 'focus', bind(this._eFocus, this));
 				addEvent(this.dom.input, 'keyup', bind(this._eKeyup, this));
-				addEvent(this.dom.del, 'click', bind(this._eClearInput, this));
-				addEvent(this.dom.list, 'click', bind(this._eSuggestClick, this));
+				addEventTap(this.dom.del, bind(this._eClearInput, this));
+				addEventTap(this.dom.list, bind(this._eSuggestClick, this));
 
 				// 点击区域外关闭
-				addEvent(this.dom.list.parentNode, 'click', bind(function (evt) {
+				addEventTap(this.dom.list.parentNode, bind(function (evt) {
 						evt = evt || global.event;
 						if (evt.stopPropagation) {
 							evt.stopPropagation();
@@ -116,13 +116,13 @@
 							evt.cancelBubble = true;
 						}
 					}, this));
-				addEvent(document, 'click', bind(function (evt) {
+				addEventTap(document, bind(function (evt) {
 						this.hideList();
 					}, this));
 			}
 			// 不出list
 			else {
-				addEvent(this.dom.del, 'click', bind(function () {
+				addEventTap(this.dom.del, bind(function () {
 						this.dom.input.value = '';
 						this.dom.input.focus();
 					}, this));
@@ -150,7 +150,7 @@
 						}
 					}, this));
 			}
-			addEvent(this.dom.submit, 'click', bind(this._eSubmit, this));
+			addEventTap(this.dom.submit, bind(this._eSubmit, this));
 		},
 		/**
 		 * 事件处理
@@ -435,13 +435,5 @@
 				}
 			}, this));
 	})();
-
-	
-	addEventTap($('tapItem'), function (e) {
-		console.log('tap 触发 11', e);
-	});
-	addEventTap($('tapItem'), function (e) {
-		console.log('tap 触发 222', e);
-	});
 
 })(this);
