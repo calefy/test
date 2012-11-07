@@ -18,6 +18,7 @@
 	// 添加事件句柄
 	function addEvent (dom, type, callback) {
 		if (!dom) {return;}
+
 		if (dom.addEventListener) {
 			dom.addEventListener(type, callback, false);
 		}
@@ -28,11 +29,40 @@
 			dom['on' + type] = callback;
 		}
 	}
+	// 删除事件监视
+	function removeEvent (dom, type, callback) {
+		if (!dom) {return;}
+
+		if (dom.removeEventListener) {
+			dom.removeEventListener(type, callback, false);
+		}
+		else if (dom.detachEvent) {
+			dom.detachEvent('on' + type, callback);
+		}
+	}
 	// 为obj绑定方法
 	function bind (func, obj) {
 		return function () {
 			func.apply(obj, arguments);
 		};
+	}
+	// 添加tap事件(touchstart,touchmove,touchend)
+	function addEventTap (dom, callback) {
+		var moved = false;
+		addEvent(dom, 'touchstart', function () {
+			addEvent(dom, 'touchmove', function () {
+				moved = true;
+			});
+		});
+
+		addEvent(dom, 'touchend', function (e) {
+			if (moved) {
+				moved = false;
+			}
+			else {
+				callback.call(null, e);
+			}
+		});
 	}
 
 
@@ -406,5 +436,12 @@
 			}, this));
 	})();
 
+	
+	addEventTap($('tapItem'), function (e) {
+		console.log('tap 触发 11', e);
+	});
+	addEventTap($('tapItem'), function (e) {
+		console.log('tap 触发 222', e);
+	});
 
 })(this);
