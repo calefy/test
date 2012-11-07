@@ -208,6 +208,13 @@
 				this.dom.input.focus();
 				this.requestNewSuggest();
 			}
+
+			if (evt.preventDefault) {
+				evt.preventDefault();
+			}
+			else {
+				evt.returnValue = false;
+			}
 		},
 		showList: function () {
 			if(this.dom.list) { this.dom.list.style.display = 'block'; }
