@@ -199,7 +199,7 @@
 			className = target.className || '';
 
 			this.dom.input.value =
-				target.tagName.toUpperCase() === 'LI' ? target.innerText : target.parentNode.innerText;
+				trim(target.tagName.toUpperCase() === 'LI' ? target.innerText : target.parentNode.innerText);
 			if (className.indexOf('icon_add') === -1) {
 				this.hideList();
 				this.submit();
