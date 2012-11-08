@@ -76,10 +76,11 @@
 	 */
 	function Search (config) {
 		this.dom = {};
-		this.dom.input = $(config.inputId);
+		this.dom.form =   $(config.formId);
+		this.dom.input =  $(config.inputId);
 		this.dom.submit = $(config.submitId);
-		this.dom.list = $(config.listId);
-		this.dom.del = $(config.deleteId);
+		this.dom.list =   $(config.listId);
+		this.dom.del =    $(config.deleteId);
 
 		// 一旦提交就不可再次提交
 		this._submitLock = false;
@@ -104,30 +105,26 @@
 			addEventTap(this.dom.del, bind(this._eClearInput, this));
 			addEventTap(this.dom.list, bind(this._eSuggestClick, this));
 			addEventTap(this.dom.submit, bind(this._eSubmit, this));
-
-			// 点击区域外关闭
-			addEventTap(this.dom.list.parentNode, bind(function (evt) {
-					evt = evt || global.event;
-					if (evt.stopPropagation) {
-						evt.stopPropagation();
-					}
-					else {
-						evt.cancelBubble = true;
-					}
-				}, this));
-			addEventTap(document, bind(function (evt) {
-					this.hideList();
-				}, this));
 		},
 		/**
 		 * 事件处理
 		 */
 		_eFocus: function (evt) {
+			var wrap = this.dom.form.parentNode,
+				className = wrap.className;
+			// 首页处理切换
+			if (className.indexOf('index_wrap') >= 0 &&
+				className.indexOf('search_onfocus') === -1) {
+				wrap.className = className + ' search_onfocus';
+			}
+
 			if (!this.getValue()) {
 				this.dom.list.innerHTML = this._defaultList;
 				this.showList();
+				this.hideDel();
 			}
 			else {
+				this.showDel();
 				this.requestNewSuggest();
 			}
 			//this.showList();
@@ -157,6 +154,14 @@
 		},
 		_eSubmit: function (evt) {
 			this.submit();
+
+			evt = evt || global.event;
+			if (evt.preventDefault) {
+				evt.preventDefault();
+			}
+			else {
+				evt.returnValue = false;
+			}
 		},
 		_eSuggestClick: function (evt) {
 			var target, className;
@@ -217,10 +222,9 @@
 			if (!this._submitLock && v) {
 				this._submitLock = true;
 				// form提交
-				return true;
-			}
-			else {
-				return false;
+				if (this.dom.form) {
+					this.dom.form.submit();
+				}
 			}
 		},
 		requestNewSuggest: function () {
@@ -228,6 +232,7 @@
 				script, funcName;
 
 			if (v) {
+				this.showDel();
 				// 与上次不同则新请求
 				if (v === this._oldValue) {
 					this.showList();
@@ -253,6 +258,7 @@
 			}
 			// 空白
 			else {
+				this.hideDel();
 				this.dom.list.innerHTML = this._defaultList;
 			}
 		},
@@ -266,19 +272,10 @@
 				className;
 			if (len > 0) {
 				for (; i < len; i++) {
-					if (i === 0) {
-						className = 'first';
-					}
-					else if (i === len - 1) {
-						className = 'last';
-					}
-					else {
-						className = null;
-					}
 					html.push(
-						'<li' + (className ? ' class="' + className + '"' : '') + '>' +
+						'<li>' +
 						'	<i class="icon icon_search"></i>' +
-						'	' + data.list[i] +
+						'	<span class="word">' + data.list[i] + '</span>' +
 						'	<i class="icon icon_add"></i>' +
 						'</li>'
 					);
@@ -363,6 +360,7 @@
 	// -------------------------------------------
 	// 页面实例
 	new Search({
+		formId:    'searchForm',           // form表单id
 		inputId:   'searchInput',          // 输入框id
 		submitId:  'searchSubmit',         // 提交按钮id
 		listId:    'searchList',           // 列表id
@@ -375,7 +373,7 @@
 			nextPageLoading = $('nextPageLoading'),
 			pageNumber = 1;
 
-		addEvent(nextPage, 'click', bind(function (evt) {
+		addEventTap(nextPage, function (evt) {
 				var target;
 				evt = evt || global.event;
 				target = evt.target || evt.srcElement;
@@ -415,7 +413,7 @@
 				else {
 					evt.returnValue = false;
 				}
-			}, this));
+			});
 	})();
 
 })(this);
