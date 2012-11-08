@@ -84,14 +84,13 @@
 		// 一旦提交就不可再次提交
 		this._submitLock = false;
 
-		this.submitUrl = config.submitUrl || '';
 		this._funcPrev = config.funcPrev || '_cbfnc_';
 		this._oldSuggestFunctionName;
 
 		// 保证所需id都存在
-		if (this.dom.input && this.dom.submit) {
+		if (this.dom.input && this.dom.submit && this.dom.list) {
 			// 记录最先的推荐数据
-			this._defaultList = this.dom.list && this.dom.list.innerHTML || '';
+			this._defaultList = this.dom.list.innerHTML || '';
 			this._init();
 		}
 	}
@@ -100,57 +99,25 @@
 		 * 初始化事件
 		 */
 		_init: function () {
-			if (this.dom.list) {
-				addEvent(this.dom.input, 'focus', bind(this._eFocus, this));
-				addEvent(this.dom.input, 'keyup', bind(this._eKeyup, this));
-				addEventTap(this.dom.del, bind(this._eClearInput, this));
-				addEventTap(this.dom.list, bind(this._eSuggestClick, this));
-
-				// 点击区域外关闭
-				addEventTap(this.dom.list.parentNode, bind(function (evt) {
-						evt = evt || global.event;
-						if (evt.stopPropagation) {
-							evt.stopPropagation();
-						}
-						else {
-							evt.cancelBubble = true;
-						}
-					}, this));
-				addEventTap(document, bind(function (evt) {
-						this.hideList();
-					}, this));
-			}
-			// 不出list
-			else {
-				addEventTap(this.dom.del, bind(function () {
-						this.dom.input.value = '';
-						this.dom.input.focus();
-					}, this));
-				addEvent(this.dom.input, 'keyup', bind(function (evt) {
-						evt = evt || global.event;
-
-						// 回车键提交
-						if (evt.which === 13) {
-							this.submit();
-						}
-
-						if (this.getValue()) {
-							this.showDel();
-						}
-						else {
-							this.hideDel();
-						}
-					}, this));
-				addEvent(this.dom.input, 'focus', bind(function (evt) {
-						if (this.getValue()) {
-							this.showDel();
-						}
-						else {
-							this.hideDel();
-						}
-					}, this));
-			}
+			addEvent(this.dom.input, 'focus', bind(this._eFocus, this));
+			addEvent(this.dom.input, 'keyup', bind(this._eKeyup, this));
+			addEventTap(this.dom.del, bind(this._eClearInput, this));
+			addEventTap(this.dom.list, bind(this._eSuggestClick, this));
 			addEventTap(this.dom.submit, bind(this._eSubmit, this));
+
+			// 点击区域外关闭
+			addEventTap(this.dom.list.parentNode, bind(function (evt) {
+					evt = evt || global.event;
+					if (evt.stopPropagation) {
+						evt.stopPropagation();
+					}
+					else {
+						evt.cancelBubble = true;
+					}
+				}, this));
+			addEventTap(document, bind(function (evt) {
+					this.hideList();
+				}, this));
 		},
 		/**
 		 * 事件处理
@@ -219,16 +186,20 @@
 			}
 		},
 		showList: function () {
-			if(this.dom.list) { this.dom.list.style.display = 'block'; }
+			var list = this.dom.list;
+			if(list) { list.style.display = 'block'; }
 		},
 		hideList: function () {
-			if(this.dom.list) { this.dom.list.style.display = 'none'; }
+			var list = this.dom.list;
+			if(list) { list.style.display = 'none'; }
 		},
 		showDel: function () {
-			if(this.dom.del) { this.dom.del.style.display = 'block'; }
+			var del = this.dom.del;
+			if(del) { del.style.display = 'block'; }
 		},
 		hideDel: function () {
-			if (this.dom.del) { this.dom.del.style.display = 'none'; }
+			var del = this.dom.del;
+			if (del) { del.style.display = 'none'; }
 		},
 		/**
 		 * 获取value值
@@ -245,8 +216,11 @@
 
 			if (!this._submitLock && v) {
 				this._submitLock = true;
-				// 跳转 或 form提交
-				document.location = this.submitUrl + '?key=' + v;
+				// form提交
+				return true;
+			}
+			else {
+				return false;
 			}
 		},
 		requestNewSuggest: function () {
@@ -392,8 +366,7 @@
 		inputId:   'searchInput',          // 输入框id
 		submitId:  'searchSubmit',         // 提交按钮id
 		listId:    'searchList',           // 列表id
-		deleteId:  'searchDel',            // 删除输入内容的按钮id
-		submitUrl: '搜索%20-2第二页.html'  // 提交链接，搜索数据拼在url后面
+		deleteId:  'searchDel'             // 删除输入内容的按钮id
 	});
 
 	// 加载下一页
