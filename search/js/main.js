@@ -69,23 +69,26 @@
 	/**
 	 * 查找
 	 * @Search
-	 * @param {String} inputId 输入框id
-	 * @param {String} submitId 提交按钮id
-	 * @param {String} listId 列表id
-	 * @param {String} submitUrl 提交链接
+	 * @param {String} config.suggestUrl 输入时动态建议的地址
+	 * @param {String} config.prefixCallback 动态建议数据反回时回调函数的前缀
 	 */
 	function Search (config) {
 		this.dom = {};
-		this.dom.form =   $(config.formId);
-		this.dom.input =  $(config.inputId);
-		this.dom.submit = $(config.submitId);
-		this.dom.list =   $(config.listId);
-		this.dom.del =    $(config.deleteId);
+		// 必要的dom节点
+		this.dom.form =   $('searchForm');
+		this.dom.input =  $('searchInput');
+		this.dom.submit = $('searchSubmit');
+		this.dom.list =   $('searchList');
+		this.dom.del =    $('searchDel');
+		this.dom.back =   $('searchBack');
 
 		// 一旦提交就不可再次提交
 		this._submitLock = false;
 
-		this._funcPrev = config.funcPrev || '_cbfnc_';
+		// suggest请求地址
+		this._suggestUrl = config.suggestUrl;
+		// suggest返回数据的回调函数前缀
+		this._funcPrev = config.prefixCallback || '_cbfnc_';
 		this._oldSuggestFunctionName;
 
 		// 保证所需id都存在
@@ -105,6 +108,7 @@
 			addEventTap(this.dom.del, bind(this._eClearInput, this));
 			addEventTap(this.dom.list, bind(this._eSuggestClick, this));
 			addEventTap(this.dom.submit, bind(this._eSubmit, this));
+			addEventTap(this.dom.back, bind(this._eBack, this));
 		},
 		/**
 		 * 事件处理
@@ -112,9 +116,12 @@
 		_eFocus: function (evt) {
 			var wrap = this.dom.form.parentNode,
 				className = wrap.className;
-			// 首页处理切换
-			if (className.indexOf('index_wrap') >= 0 &&
-				className.indexOf('search_onfocus') === -1) {
+			// 一直查找到最上层“..._wrap”
+			while (className.indexOf('_wrap') === -1) {
+				wrap = wrap.parentNode;
+				className = wrap.className;
+			}
+			if (className.indexOf('search_onfocus') === -1) {
 				wrap.className = className + ' search_onfocus';
 			}
 
@@ -127,7 +134,6 @@
 				this.showDel();
 				this.requestNewSuggest();
 			}
-			//this.showList();
 		},
 		_eKeyup: function (evt) {
 			evt = evt || global.event;
@@ -144,6 +150,26 @@
 			this.dom.input.value = '';
 			this.dom.list.innerHTML = this._defaultList;
 
+			evt = evt || global.event;
+			if (evt.preventDefault) {
+				evt.preventDefault();
+			}
+			else {
+				evt.returnValue = false;
+			}
+		},
+		_eBack: function (evt) {
+			var wrap = this.dom.form.parentNode,
+				className = wrap.className;
+			while (className.indexOf('_wrap') === -1) {
+				wrap = wrap.parentNode;
+				className = wrap.className;
+			}
+			wrap.className = className.replace('search_onfocus', '');
+
+			this.hideList();
+			this.hideDel();
+			
 			evt = evt || global.event;
 			if (evt.preventDefault) {
 				evt.preventDefault();
@@ -229,6 +255,7 @@
 		},
 		requestNewSuggest: function () {
 			var v = this.getValue(),
+				oldScriptDom,
 				script, funcName;
 
 			if (v) {
@@ -241,10 +268,13 @@
 					this._oldValue = v;
 					// 保证返回顺序
 					if (this._oldSuggestFunctionName) { // 删除旧的
+						oldScriptDom = $(this._oldSuggestFunctionName);
+						oldScriptDom.parentNode.removeChild(oldScriptDom);
 						delete global[this._oldSuggestFunctionName];
 					}
+					// 每次回调函数不同，保证返回顺序
 					funcName = this._funcPrev + (new Date().getTime() + Math.round(Math.random() * 1000)); 
-					funcName = this._funcPrev + '1234567'; // 本行测试用
+					funcName = this._funcPrev + '1234567'; // 本行测试用，实际中直接删除
 					this._oldSuggestFunctionName = funcName;
 					global[funcName] = bind(function (data) {
 						this.showNewSuggest(data);
@@ -252,7 +282,8 @@
 					}, this);
 					// 请求新的数据
 					script = document.createElement('script');
-					script.src = 'data/new_suggest.js?value=' + v + '&callback=' + funcName;
+					script.id = funcName;
+					script.src = this._suggestUrl + '?value=' + v + '&callback=' + funcName;
 					document.getElementsByTagName('head')[0].appendChild(script);
 				}
 			}
@@ -359,19 +390,19 @@
 
 	// -------------------------------------------
 	// 页面实例
+	// 注册搜索功能
 	new Search({
-		formId:    'searchForm',           // form表单id
-		inputId:   'searchInput',          // 输入框id
-		submitId:  'searchSubmit',         // 提交按钮id
-		listId:    'searchList',           // 列表id
-		deleteId:  'searchDel'             // 删除输入内容的按钮id
-	});
+			'suggestUrl':     'data/new_suggest.js',
+			'prefixCallback': '_cbfnc_'
+		});
 
 	// 加载下一页
 	(function () {
 		var nextPage = $('nextPage'),
 			nextPageLoading = $('nextPageLoading'),
-			pageNumber = 1;
+			pageNumber = 1,
+			// 测试数据路径(请求下一页数据)
+			url = 'data/new_page_data.js';
 
 		addEventTap(nextPage, function (evt) {
 				var target;
@@ -380,6 +411,7 @@
 
 				// 返回顶部
 				if (target.className.indexOf('return_top') >= 0) {
+					// todo: 手机浏览器返回顶部
 					global.document.getElementsByTagName('body')[0].scrollTop = 0;
 				}
 				// 加载下一页
@@ -387,15 +419,12 @@
 					nextPage.style.display = 'none';
 					nextPageLoading.style.display = 'block';
 					
-					// 测试数据路径
-					new Ajax().get('data/new_page_data.js', function (data) {
+					new Ajax().get(url, function (data) {
 							var div, page;
 							if (data) {
 								page = '<a class="page_num" href="#">第' + (++pageNumber) + '页</a>';
 								div = global.document.createElement('div');
-
 								div.innerHTML = page + data;
-
 								nextPage.parentNode.insertBefore(div, nextPage);
 
 								nextPage.style.display = 'block';
