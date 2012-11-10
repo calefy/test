@@ -148,6 +148,7 @@
 		},
 		_eClearInput: function (evt) {
 			this.dom.input.value = '';
+			this.hideDel();
 			this.dom.list.innerHTML = this._defaultList;
 
 			evt = evt || global.event;
@@ -411,7 +412,7 @@
 
 				// 返回顶部
 				if (target.className.indexOf('return_top') >= 0) {
-					// todo: 手机浏览器返回顶部
+					// 浏览器返回顶部
 					global.document.getElementsByTagName('body')[0].scrollTop = 0;
 				}
 				// 加载下一页
