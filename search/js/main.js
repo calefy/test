@@ -81,6 +81,9 @@
 		this.dom.list =   $('searchList');
 		this.dom.del =    $('searchDel');
 		this.dom.back =   $('searchBack');
+		// 底部额外搜索部分
+		this.dom.footInput = $('searchInputFoot');
+		this.dom.footSubmit = $('searchInputSubmit');
 
 		// 一旦提交就不可再次提交
 		this._submitLock = false;
@@ -109,6 +112,34 @@
 			addEventTap(this.dom.list, bind(this._eSuggestClick, this));
 			addEventTap(this.dom.submit, bind(this._eSubmit, this));
 			addEventTap(this.dom.back, bind(this._eBack, this));
+			// 底部额外搜索框
+			addEvent(this.dom.footInput, 'focus', bind(function (evt) {
+				this.dom.footInput.blur();
+				this.dom.input.focus();
+
+				evt = evt || global.event;
+				if (evt.preventDefault) {
+					evt.preventDefault();
+					evt.stopPropagation();
+				}
+				else {
+					evt.returnValue = false;
+					eve.cancelBubble = true;
+				}
+			}, this));
+			addEventTap(this.dom.footSubmit, bind(function (evt) {
+				this.dom.submit.click();
+
+				evt = evt || global.event;
+				if (evt.preventDefault) {
+					evt.preventDefault();
+					evt.stopPropagation();
+				}
+				else {
+					evt.returnValue = false;
+					eve.cancelBubble = true;
+				}
+			}, this));
 		},
 		/**
 		 * 事件处理
@@ -141,6 +172,14 @@
 			// 回车键提交
 			if (evt.which === 13) {
 				this.submit();
+				if (evt.preventDefault) {
+					evt.preventDefault();
+					evt.stopPropagation();
+				}
+				else {
+					evt.returnValue = false;
+					evt.cancelBubble = true;
+				}
 			}
 			else {
 				this.requestNewSuggest();
