@@ -18,7 +18,6 @@ box-shadow:1px 1px 3px #a4a7a3 inset;}
 .index_wrap .about_us{margin:6em 0 1em;}
 .index_wrap .about_us a{color:#333;text-decoration:none;}
 .index_wrap .index_search{position:relative;width:255px;margin:0 auto;}
-.copyright{font-size:12px;}
 .head .logo{margin-top:4px;}
     /**icon**/
 .icon{display:inline-block;font-size:0;overflow:hidden;}
@@ -111,4 +110,5 @@ border-radius:3px;
 .page_foot{background:url(../images/next_bgFoot.gif) repeat-x;height:28px;}
 .page_foot .next_page{background:none;line-height:28px;display:block;height:28px;}
 .search_foot{margin:7px auto 19px;width:220px;}
-.copyright{font:12px arial;color:#999;text-align:right;margin:2px 0 4px;}
+.copyright{font-size:12px;font-family:arial;color:#999;text-align:right;margin:2px 0 4px;}
+.index_wrap .copyright{text-align:center;}
