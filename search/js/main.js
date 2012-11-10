@@ -170,6 +170,8 @@
 
 			this.hideList();
 			this.hideDel();
+
+			this.dom.input.blur();
 			
 			evt = evt || global.event;
 			if (evt.preventDefault) {
