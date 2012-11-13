@@ -27,7 +27,7 @@ box-shadow:1px 1px 3px #a4a7a3 inset;}
 .ajax_loader{background:url(../images/ajax-loader.gif) no-repeat;width:16px;height:16px;vertical-align:middle;margin:-2px 4px 0 0;}
 .icon_del{display:none;background:url(../images/icon_del.gif) no-repeat center center;width:20px;height:20px;  position:absolute;top:3px;left:231px;}
 .arrow_down{background:url(../images/arrow_down.gif) no-repeat;width:10px;height:9px;margin:-3px 0 0 3px;}
-.icon_phone{background:url(../images/icon_phone.gif) no-repeat;width:7px;height:12px;}
+.icon_phone{background:url(../images/icon_phone.gif) no-repeat;width:7px;height:12px; vertical-align:middle;margin-top:-2px;}
 .return_top{background:url(../images/return_top.gif) no-repeat;width:38px;height:28px;float:right;}
 /**下拉菜单**/
  .search_list li{height:40px;border-bottom:1px solid #999;position:relative;text-align:left;}
@@ -47,9 +47,9 @@ box-shadow:1px 1px 3px #a4a7a3 inset;}
 .search_box{position:relative;}
 .result_wrap .input_search{border:none;-webkit-border-radius:3px; background:#cacfc8; width:160px;height:25px;padding-left:5px;font-size:15px;
 box-shadow:1px 1px 3px #a4a7a3 inset;}
-.result_wrap .input_submit{cursor:pointer;border:none;margin:-2px 0 0 -5px;-webkit-border-radius:5px; vertical-align:middle;color:#fff;width:50px;height:26px;font-size:15px;
+.result_wrap .input_submit{cursor:pointer;border:none;margin:0px 0 0 -5px;-webkit-border-radius:5px; vertical-align:middle;color:#fff;width:50px;height:25px;font-size:15px;
     background:-webkit-linear-gradient(#027efa,#2b547d);}
-.result_wrap .index_search{margin:4px 0 0 10px;}
+.result_wrap .index_search{margin:4px 0 0 10px;width:230px;}
 
 
 .red{color:red;}
