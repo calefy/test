@@ -469,6 +469,7 @@
 								div.innerHTML = page + data;
 								nextPage.parentNode.insertBefore(div, nextPage);
 
+								nextPage.innerHTML = '<div class="page_foot"><a href="#" class="next_page">下一页<i class="icon return_top"></i></a></div>';
 								nextPage.style.display = 'block';
 								nextPageLoading.style.display = 'none';
 							}
