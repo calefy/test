@@ -108,6 +108,7 @@
 		_init: function () {
 			addEvent(this.dom.input, 'focus', bind(this._eFocus, this));
 			addEvent(this.dom.input, 'keyup', bind(this._eKeyup, this));
+			addEvent(this.dom.input, 'input', bind(this._eInputChange, this));
 			addEventTap(this.dom.del, bind(this._eClearInput, this));
 			addEventTap(this.dom.list, bind(this._eSuggestClick, this));
 			addEventTap(this.dom.submit, bind(this._eSubmit, this));
@@ -145,6 +146,7 @@
 		 * 事件处理
 		 */
 		_eFocus: function (evt) {
+			alert('infocus');
 			var wrap = this.dom.form.parentNode,
 				className = wrap.className;
 			// 一直查找到最上层“..._wrap”
@@ -170,8 +172,9 @@
 			evt = evt || global.event;
 
 			// 回车键提交
-			if (evt.which === 13) {
+			if (evt.keyCode === 13) {
 				this.submit();
+
 				if (evt.preventDefault) {
 					evt.preventDefault();
 					evt.stopPropagation();
@@ -181,9 +184,9 @@
 					evt.cancelBubble = true;
 				}
 			}
-			else {
-				this.requestNewSuggest();
-			}
+		},
+		_eInputChange: function (evt) {
+			this.requestNewSuggest();
 		},
 		_eClearInput: function (evt) {
 			this.dom.input.value = '';
