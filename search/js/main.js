@@ -493,4 +493,9 @@
 			});
 	})();
 
+	// 地址栏隐藏
+	addEvent(global, 'load', function () {
+		global.scrollTo(0, 1);
+	});
+
 })(this);
