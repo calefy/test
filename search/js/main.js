@@ -106,7 +106,7 @@
 		 * 初始化事件
 		 */
 		_init: function () {
-			addEvent(this.dom.input, 'focus', bind(this._eFocus, this));
+			addEvent(this.dom.input, 'click', bind(this._eFocus, this));
 			addEvent(this.dom.input, 'keyup', bind(this._eKeyup, this));
 			addEvent(this.dom.input, 'input', bind(this._eInputChange, this));
 			addEventTap(this.dom.del, bind(this._eClearInput, this));
@@ -166,6 +166,7 @@
 				this.showDel();
 				this.requestNewSuggest();
 			}
+
 		},
 		_eKeyup: function (evt) {
 			evt = evt || global.event;
@@ -492,10 +493,5 @@
 				}
 			});
 	})();
-
-	// 地址栏隐藏
-	addEvent(global, 'load', function () {
-		global.scrollTo(0, 1);
-	});
 
 })(this);
