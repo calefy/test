@@ -146,7 +146,6 @@
 		 * 事件处理
 		 */
 		_eFocus: function (evt) {
-			alert('infocus');
 			var wrap = this.dom.form.parentNode,
 				className = wrap.className;
 			// 一直查找到最上层“..._wrap”
