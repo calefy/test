@@ -106,28 +106,16 @@
 		 * 初始化事件
 		 */
 		_init: function () {
-			addEvent(this.dom.input, 'click', bind(this._eFocus, this));
-			addEvent(this.dom.input, 'keyup', bind(this._eKeyup, this));
-			addEvent(this.dom.input, 'input', bind(this._eInputChange, this));
+			// focus中有很多操作，ios5中会失去焦点，因此改为下面方式
+			addEventTap(this.dom.input, bind(this._ePrepareFocus, this));
+			addEvent(this.dom.input, 'keyup', bind(this._eKeyup, this)); // 回车
+			addEvent(this.dom.input, 'input', bind(this._eInputChange, this)); // 内容改变
 			addEventTap(this.dom.del, bind(this._eClearInput, this));
 			addEventTap(this.dom.list, bind(this._eSuggestClick, this));
 			addEventTap(this.dom.submit, bind(this._eSubmit, this));
 			addEventTap(this.dom.back, bind(this._eBack, this));
 			// 底部额外搜索框
-			addEvent(this.dom.footInput, 'focus', bind(function (evt) {
-				this.dom.footInput.blur();
-				this.dom.input.focus();
-
-				evt = evt || global.event;
-				if (evt.preventDefault) {
-					evt.preventDefault();
-					evt.stopPropagation();
-				}
-				else {
-					evt.returnValue = false;
-					eve.cancelBubble = true;
-				}
-			}, this));
+			addEventTap(this.dom.footInput, bind(this._ePrepareFocus, this));
 			addEventTap(this.dom.footSubmit, bind(function (evt) {
 				this.dom.submit.click();
 
@@ -145,7 +133,7 @@
 		/**
 		 * 事件处理
 		 */
-		_eFocus: function (evt) {
+		_ePrepareFocus: function (evt) {
 			var wrap = this.dom.form.parentNode,
 				className = wrap.className;
 			// 一直查找到最上层“..._wrap”
@@ -166,7 +154,8 @@
 				this.showDel();
 				this.requestNewSuggest();
 			}
-
+			
+			this.dom.input.focus();
 		},
 		_eKeyup: function (evt) {
 			evt = evt || global.event;
