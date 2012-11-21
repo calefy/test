@@ -7,6 +7,23 @@
 
 	var document = global.document;
 	
+	// 是否支持touch
+	supportTouch = (function () {
+		var eventName = 'ontouchstart',
+			el = document.createElement('div'),
+			isSupport = false;
+
+		if (eventName in el) {
+			isSupport = true;
+		}
+		else {
+			el.setAttribute(eventName, 'return;');
+			isSupport = typeof el[eventName] === 'function';
+		}
+
+		return isSupport;
+	})();
+
 	// 获取dom
 	function $ (id) {
 		return document.getElementById(id);
@@ -64,6 +81,15 @@
 			}
 		});
 	}
+	// 事件代理
+	function delegateEvent (dom, type, callback) {
+		if (type === 'click' && supportTouch) {
+			addEventTap(dom, callback);
+		}
+		else {
+			addEvent(dom, type, callback);
+		}
+	}
 
 
 	/**
@@ -107,16 +133,16 @@
 		 */
 		_init: function () {
 			// focus中有很多操作，ios5中会失去焦点，因此改为下面方式
-			addEventTap(this.dom.input, bind(this._ePrepareFocus, this));
-			addEvent(this.dom.input, 'keyup', bind(this._eKeyup, this)); // 回车
-			addEvent(this.dom.input, 'input', bind(this._eInputChange, this)); // 内容改变
-			addEventTap(this.dom.del, bind(this._eClearInput, this));
-			addEventTap(this.dom.list, bind(this._eSuggestClick, this));
-			addEventTap(this.dom.submit, bind(this._eSubmit, this));
-			addEventTap(this.dom.back, bind(this._eBack, this));
+			delegateEvent(this.dom.input, 'click', bind(this._ePrepareFocus, this));
+			delegateEvent(this.dom.input, 'keyup', bind(this._eKeyup, this)); // 回车
+			delegateEvent(this.dom.input, 'input', bind(this._eInputChange, this)); // 内容改变
+			delegateEvent(this.dom.del, 'click', bind(this._eClearInput, this));
+			delegateEvent(this.dom.list, 'click', bind(this._eSuggestClick, this));
+			delegateEvent(this.dom.submit, 'click', bind(this._eSubmit, this));
+			delegateEvent(this.dom.back, 'click', bind(this._eBack, this));
 			// 底部额外搜索框
-			addEventTap(this.dom.footInput, bind(this._ePrepareFocus, this));
-			addEventTap(this.dom.footSubmit, bind(function (evt) {
+			delegateEvent(this.dom.footInput, 'click', bind(this._ePrepareFocus, this));
+			delegateEvent(this.dom.footSubmit, 'click', bind(function (evt) {
 				this.dom.submit.click();
 
 				evt = evt || global.event;
@@ -441,7 +467,7 @@
 			// 测试数据路径(请求下一页数据)
 			url = 'data/new_page_data.js';
 
-		addEventTap(nextPage, function (evt) {
+		delegateEvent(nextPage, 'click', function (evt) {
 				var target;
 				evt = evt || global.event;
 				target = evt.target || evt.srcElement;
