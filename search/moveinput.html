@@ -4,17 +4,20 @@
 	<meta charset="UTF-8">
 	<title>测试移动input节点会丢失focus状态</title>
 	<style type="text/css">
-	input{border: 1px solid #ececec;width:200px;padding:3px 5px;box-shadow:0 0 5px rgba(0,0,0,.4);}
+	input{border: 1px solid #ececec;width:60%;padding:3px 5px;box-shadow:0 0 5px rgba(0,0,0,.4);}
+#desc{display:none;}
 	.change{padding-top:30px;}
-	.change input{width:240px;padding:5px 8px;border-color:#fce;}
+	.change input{width:90%;padding:5px 8px;border-color:#fce;}
+.change #desc{display:block;}
 	#log{padding:5px;}
 	</style>
 </head>
 <body>
-	<h1>测试移动 input 节点会否丢失 focus 状态</h1>
+	<h1 id="head">测试移动 input 节点会否丢失 focus 状态</h1>
 	
 	<div id="inputWrap">
 		<input type="text" id="input" />
+		<p id="desc">focus 时才被显示</p>
 	</div>
 
 	<p>Log: </p>
