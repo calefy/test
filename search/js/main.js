@@ -90,17 +90,6 @@
 			addEvent(dom, type, callback);
 		}
 	}
-	function log (s) {
-		var dom = document.getElementById('tempLog');
-		if (!dom) {
-			dom = document.createElement('div');
-			dom.id = 'tempLog';
-			dom.style.cssText="background:#222;position:absolute;bottom:0;height:100px;overflow:auto;color:#fff;padding:5px;box-shadow:0 0 5px rgba(0,0,0,.4);"
-			document.body.appendChild(dom);
-		}
-		dom.innerHTML += '<p>'+s+'</p>';
-	}
-
 
 	/**
 	 * 查找
@@ -180,7 +169,6 @@
 				return;
 			}
 			this._runnedFocus = evt.type;
-			log('in prepare func: ' + evt.type);
 			var wrap = this.dom.form.parentNode,
 				className = wrap.className;
 			// 一直查找到最上层“..._wrap”
@@ -399,7 +387,7 @@
 				// 请求新的数据
 				script = document.createElement('script');
 				script.id = scriptId;
-				script.src = this._suggestUrl + '?prefix=' + v;
+				script.src = this._suggestUrl + '?prefix=' + encodeURIComponent(v);
 				document.getElementsByTagName('head')[0].appendChild(script);
 			}
 		},
@@ -407,12 +395,16 @@
 		 * 显示新的suggest
 		 */
 		showNewSuggest: function (data) {
-			var len = data.suggestions && data.suggestions.length,//data.list && data.list.length,
+			if (!data) {return;}
+			var len = data.suggestions && data.suggestions.length,
 				i = 0,
 				html = ['<ul>'],
 				className;
 			if (len > 0) {
 				for (; i < len; i++) {
+					if (this.isTooLong(data.suggestions[i])) {
+						continue;
+					}
 					html.push(
 						'<li>' +
 						'	<i class="icon icon_search"></i>' +
@@ -428,6 +420,26 @@
 			else if (len === 0) {
 				this.hideList();
 			}
+		},
+		/**
+		 * 太长
+		 */
+		isTooLong: function (s) {
+			var max = 26,  // 最长26字节
+				count = 0;
+			if (s.length <= max / 2) {return false;}
+			for (var i = 0, len = s.length; i < len; i++) {
+				if (s.charCodeAt(i) > 255) {
+					count += 2;
+				}
+				else {
+					count += 1;
+				}
+				if (count > 26) {
+					return true;
+				}
+			}
+			return false;
 		}
 	};
 
@@ -530,16 +542,47 @@
 					nextPage.style.display = 'none';
 					nextPageLoading.style.display = 'block';
 					// url
-					nextUrl = nextPage.getElementsByTagName('a')[0].href;
+					nextUrl = nextPage.getElementsByTagName('a')[0].href + '&data_type=json';
+					// nextUrl = encodeURI(nextUrl);
 					requestStr = nextUrl.replace(/.*(query=[^&]+).*/g, '$1');
 					
 					new Ajax().get(nextUrl, function (data) {
-							var div, page;
+							var fragment, div, link, items, item, i, len, resultWrap;
 							if (data) {
-								page = '<a class="page_num" href="#">第' + (++pageNumber) + '页</a>';
-								div = global.document.createElement('div');
-								div.innerHTML = page + data;
-								nextPage.parentNode.insertBefore(div, nextPage);
+								if (global.JSON) {
+									data = global.JSON.parse(data);
+								}
+								else {
+									eval('data='+data);
+								}
+								fragment = document.createDocumentFragment();
+								// 第几页 
+								link = document.createElement('a');
+								link.className = 'page_num';
+								link.innerHTML = '第' + (++pageNumber) + '页';
+								fragment.appendChild(link);
+								// 条目
+								if (data.items) {
+									items = data.items;
+									for (i= 0, len=items.length; i < len; i++) {
+										item = items[i];
+										div = document.createElement('div');
+										div.className = 'dk_content';
+										div.innerHTML = item.format_title + 
+														item.snippet +
+														item.snippet_ext +
+														item.snapshot;
+
+										fragment.appendChild(div);
+									}
+								}
+
+								
+								resultWrap = nextPage.previousSibling;
+								while (resultWrap.className !== 'result_list') {
+									resultWrap = resultWrap.previousSibling;
+								}
+								resultWrap.appendChild(fragment);
 
 								requestStr = url + (pageNumber * rn) + '&' + requestStr;
 								nextPage.innerHTML = '<div class="page_foot"><a href="'+requestStr+'" class="next_page">下一页<i class="icon return_top"></i></a></div>';
