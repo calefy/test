@@ -181,6 +181,7 @@
 		 */
 		_ePrepareFocus: function (evt) {
 			log('in prepare func: ' + evt.type);
+			return;
 			var wrap = this.dom.form.parentNode,
 				className = wrap.className;
 			// 一直查找到最上层“..._wrap”
