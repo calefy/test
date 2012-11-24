@@ -149,7 +149,8 @@
 		 */
 		_init: function () {
 			// focus中有很多操作，ios5中会失去焦点，因此改为下面方式
-			delegateEvent(this.dom.input, 'click', bind(this._ePrepareFocus, this));
+			//delegateEvent(this.dom.input, 'click', bind(this._ePrepareFocus, this));
+			delegateEvent(this.dom.input, 'focus', bind(this._ePrepareFocus, this));
 			delegateEvent(this.dom.input, 'keyup', bind(this._eKeyup, this)); // 回车
 			delegateEvent(this.dom.input, 'input', bind(this._eInputChange, this)); // 内容改变
 			delegateEvent(this.dom.del, 'click', bind(this._eClearInput, this));
