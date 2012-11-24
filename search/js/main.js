@@ -90,6 +90,18 @@
 			addEvent(dom, type, callback);
 		}
 	}
+	function log (s) {
+        var dom = document.getElementById('tempLog');
+		if (!dom) {
+			dom = document.createElement('div');
+			dom.id = 'tempLog';
+			dom.style.cssText="background:#222;position:absolute;bottom:0;height:100px;" +
+					"overflow:auto;color:#fff;padding:5px;box-shadow:0 0 5px rgba(0,0,0,.4);";
+			document.body.appendChild(dom);
+        }
+        dom.innerHTML += '<p>'+s+'</p>';
+	}
+
 
 	/**
 	 * 查找
@@ -165,10 +177,12 @@
 		 * 事件处理
 		 */
 		_ePrepareFocus: function (evt) {
+			log('in '+ evt.type);
 			if (this._runnedFocus && this._runnedFocus !== evt.type) {
 				return;
 			}
 			this._runnedFocus = evt.type;
+			log('real execute in '+ evt.type);
 			var wrap = this.dom.form.parentNode,
 				className = wrap.className;
 			// 一直查找到最上层“..._wrap”
