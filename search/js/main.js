@@ -92,7 +92,6 @@
 	}
 	function log (s) {
         var dom = document.getElementById('tempLog');
-<<<<<<< HEAD
 		if (!dom) {
 			dom = document.createElement('div');
 			dom.id = 'tempLog';
