@@ -123,12 +123,17 @@
 
 		// 一旦提交就不可再次提交
 		this._submitLock = false;
+		// suggest请求只在上次返回后才再次发起
+		this._requestLock = false;
+		this._requestRecall = false;
+
+		// 缓存请求过的内容
+		this.requestedNull = '';
+		this.requestedMap = {};
+		this.lastRequestValue = ''; // 上次请求的值，全局中无法得到v
 
 		// suggest请求地址
 		this._suggestUrl = config.suggestUrl;
-		// suggest返回数据的回调函数前缀
-		this._funcPrev = config.prefixCallback || '_cbfnc_';
-		this._oldSuggestFunctionName;
 
 		// 保证所需id都存在
 		if (this.dom.input && this.dom.submit && this.dom.list) {
@@ -136,6 +141,7 @@
 			this._defaultList = this.dom.list.innerHTML || '';
 			this._init();
 		}
+
 	}
 	Search.prototype = {
 		/**
@@ -192,8 +198,8 @@
 			}
 			else {
 				this.showDel();
-				this.requestNewSuggest();
 			}
+			this.requestNewSuggest();
 			log('Added class "search_onfocus".')
 
 			this.dom.input.focus();
@@ -333,49 +339,77 @@
 		},
 		requestNewSuggest: function () {
 			var v = this.getValue(),
+				scriptId,
 				oldScriptDom,
-				script, funcName;
+				script, funcName,
+				needRequest = true;
+
+			if (this._requestLock) {
+				this._requestRecall = true;
+				return;
+			}
+			this._requestRecall = false;
 
 			if (v) {
 				this.showDel();
-				// 与上次不同则新请求
-				if (v === this._oldValue) {
-					this.showList();
-				}
-				else {
-					this._oldValue = v;
-					// 保证返回顺序
-					if (this._oldSuggestFunctionName) { // 删除旧的
-						oldScriptDom = $(this._oldSuggestFunctionName);
-						oldScriptDom.parentNode.removeChild(oldScriptDom);
-						delete global[this._oldSuggestFunctionName];
-					}
-					// 每次回调函数不同，保证返回顺序
-					funcName = this._funcPrev + (new Date().getTime() + Math.round(Math.random() * 1000)); 
-					funcName = this._funcPrev + '1234567'; // 本行测试用，实际中直接删除
-					this._oldSuggestFunctionName = funcName;
-					global[funcName] = bind(function (data) {
-						this.showNewSuggest(data);
-						delete global[funcName];
-					}, this);
-					// 请求新的数据
-					script = document.createElement('script');
-					script.id = funcName;
-					script.src = this._suggestUrl + '?value=' + v + '&callback=' + funcName;
-					document.getElementsByTagName('head')[0].appendChild(script);
+				// 存在缓存
+				if (this.requestedMap[v]) {
+					this.showNewSuggest(this.requestedMap[v]);
+					needRequest = false;
 				}
 			}
 			// 空白
 			else {
 				this.hideDel();
-				this.dom.list.innerHTML = this._defaultList;
+				if (this.requestedNull) {
+					this.showNewSuggest(this.requestedMap[v]);
+					needRequest = false;
+				}
+			}
+
+			// 需要重新请求
+			if (needRequest) {
+				this._requestLock = true;
+				this.lastRequestValue = v;
+				// 保证返回顺序
+				funcName = 'suggest'
+				scriptId = 'scriptid_' + funcName;
+				// 删除旧节点
+				oldScriptDom = $(scriptId);
+				if (oldScriptDom) {
+					oldScriptDom.parentNode.removeChild(oldScriptDom);
+				}
+				// 绑定固定回调一次
+				else {
+					global[funcName] = bind(function (data) {
+						if (this.lastRequestValue) {
+							this.requestedMap[this.lastRequestValue] = data;
+						}
+						else {
+							this.requestedNull = data;
+						}
+
+						this.showNewSuggest(data);
+
+						this._requestLock = false;
+						// 如果需要再次请求，则发起
+						if (this._requestRecall) {
+							this.requestNewSuggest();
+						}
+					}, this);
+				}
+				// 请求新的数据
+				script = document.createElement('script');
+				script.id = scriptId;
+				script.src = this._suggestUrl + '?prefix=' + v;
+				document.getElementsByTagName('head')[0].appendChild(script);
 			}
 		},
 		/**
 		 * 显示新的suggest
 		 */
 		showNewSuggest: function (data) {
-			var len = data.list && data.list.length,
+			var len = data.suggestions && data.suggestions.length,//data.list && data.list.length,
 				i = 0,
 				html = ['<ul>'],
 				className;
@@ -384,7 +418,7 @@
 					html.push(
 						'<li>' +
 						'	<i class="icon icon_search"></i>' +
-						'	<span class="word">' + data.list[i] + '</span>' +
+						'	<span class="word">' + data.suggestions[i] + '</span>' +
 						'	<i class="icon icon_add"></i>' +
 						'</li>'
 					);
@@ -470,8 +504,7 @@
 	// 页面实例
 	// 注册搜索功能
 	new Search({
-			'suggestUrl':     'data/new_suggest.js',
-			'prefixCallback': '_cbfnc_'
+			'suggestUrl': 'http://192.168.11.112:8090/'
 		});
 
 	// 加载下一页
@@ -480,10 +513,12 @@
 			nextPageLoading = $('nextPageLoading'),
 			pageNumber = 1,
 			// 测试数据路径(请求下一页数据)
-			url = 'data/new_page_data.js';
+			//url = 'data/new_page_data.js';
+			rn = 10,
+			url = '/search?rn=' + rn + '&sp=';
 
 		delegateEvent(nextPage, 'click', function (evt) {
-				var target;
+				var target, nextUrl, requestStr;
 				evt = evt || global.event;
 				target = evt.target || evt.srcElement;
 
@@ -496,8 +531,11 @@
 				else {
 					nextPage.style.display = 'none';
 					nextPageLoading.style.display = 'block';
+					// url
+					nextUrl = nextPage.getElementsByTagName('a')[0].href;
+					requestStr = nextUrl.replace(/.*(query=[^&]+).*/g, '$1');
 					
-					new Ajax().get(url, function (data) {
+					new Ajax().get(nextUrl, function (data) {
 							var div, page;
 							if (data) {
 								page = '<a class="page_num" href="#">第' + (++pageNumber) + '页</a>';
@@ -505,7 +543,8 @@
 								div.innerHTML = page + data;
 								nextPage.parentNode.insertBefore(div, nextPage);
 
-								nextPage.innerHTML = '<div class="page_foot"><a href="#" class="next_page">下一页<i class="icon return_top"></i></a></div>';
+								requestStr = url + (pageNumber * rn) + '&' + requestStr;
+								nextPage.innerHTML = '<div class="page_foot"><a href="'+requestStr+'" class="next_page">下一页<i class="icon return_top"></i></a></div>';
 								nextPage.style.display = 'block';
 								nextPageLoading.style.display = 'none';
 							}
