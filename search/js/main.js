@@ -147,8 +147,9 @@
 		 */
 		_init: function () {
 			// focus中有很多操作，ios5中会失去焦点，因此改为下面方式
-			//delegateEvent(this.dom.input, 'click', bind(this._ePrepareFocus, this));
+			delegateEvent(this.dom.input, 'click', bind(this._ePrepareFocus, this));
 			delegateEvent(this.dom.input, 'focus', bind(this._ePrepareFocus, this));
+
 			delegateEvent(this.dom.input, 'keyup', bind(this._eKeyup, this)); // 回车
 			delegateEvent(this.dom.input, 'input', bind(this._eInputChange, this)); // 内容改变
 			delegateEvent(this.dom.del, 'click', bind(this._eClearInput, this));
@@ -170,14 +171,15 @@
 					eve.cancelBubble = true;
 				}
 			}, this));
-			addEvent(this.dom.input, 'focus', function () {
-				log('onfocus!!!')
-			});
 		},
 		/**
 		 * 事件处理
 		 */
 		_ePrepareFocus: function (evt) {
+			if (this._runnedFocus && this._runnedFocus !== evt.type) {
+				return;
+			}
+			this._runnedFocus = evt.type;
 			log('in prepare func: ' + evt.type);
 			var wrap = this.dom.form.parentNode,
 				className = wrap.className;
@@ -186,8 +188,6 @@
 				wrap = wrap.parentNode;
 				className = wrap.className;
 			}
-			log('only search!')
-			return;
 			if (className.indexOf('search_onfocus') === -1) {
 				wrap.className = className + ' search_onfocus';
 			}
@@ -200,7 +200,6 @@
 				this.showDel();
 			}
 			this.requestNewSuggest();
-			log('Added class "search_onfocus".')
 
 			this.dom.input.focus();
 		},
