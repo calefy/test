@@ -186,12 +186,12 @@
 				wrap = wrap.parentNode;
 				className = wrap.className;
 			}
+			log('only search!')
+			return;
 			if (className.indexOf('search_onfocus') === -1) {
 				wrap.className = className + ' search_onfocus';
 			}
 
-log('add Class ok!');
-return;
 			if (!this.getValue()) {
 				this.showList();
 				this.hideDel();
