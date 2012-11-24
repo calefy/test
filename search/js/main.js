@@ -137,8 +137,6 @@
 
 		// 保证所需id都存在
 		if (this.dom.input && this.dom.submit && this.dom.list) {
-			// 记录最先的推荐数据
-			this._defaultList = this.dom.list.innerHTML || '';
 			this._init();
 		}
 
@@ -181,7 +179,6 @@
 		 */
 		_ePrepareFocus: function (evt) {
 			log('in prepare func: ' + evt.type);
-			return;
 			var wrap = this.dom.form.parentNode,
 				className = wrap.className;
 			// 一直查找到最上层“..._wrap”
@@ -193,8 +190,9 @@
 				wrap.className = className + ' search_onfocus';
 			}
 
+log('add Class ok!');
+return;
 			if (!this.getValue()) {
-				this.dom.list.innerHTML = this._defaultList;
 				this.showList();
 				this.hideDel();
 			}
@@ -229,7 +227,6 @@
 		_eClearInput: function (evt) {
 			this.dom.input.value = '';
 			this.hideDel();
-			this.dom.list.innerHTML = this._defaultList;
 
 			evt = evt || global.event;
 			if (evt.preventDefault) {
