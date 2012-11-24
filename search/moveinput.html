@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>测试移动input节点会丢失focus状态</title>
+	<style type="text/css">
+	input{border: 1px solid #ececec;width:200px;padding:3px 5px;box-shadow:0 0 5px rgba(0,0,0,.4);}
+	.change{padding-top:30px;}
+	.change input{width:240px;padding:5px 8px;border-color:#fce;}
+	#log{padding:5px;}
+	</style>
+</head>
+<body>
+	<h1>测试移动 input 节点会否丢失 focus 状态</h1>
+	
+	<div id="inputWrap">
+		<input type="text" id="input" />
+	</div>
+
+	<p>Log: </p>
+	<div id="log"></div>
+
+	<script type="text/javascript">
+	(function () {
+		var $ = function (s) {return document.getElementById(s);},
+			input = $('input'),
+			inputWrap= $('inputWrap'),
+			logDom = $('log'),
+			log = function (s) {
+				logDom.innerHTML += '<p>'+s+'</p>';
+			};
+
+		// focus event handler
+		input.addEventListener('focus', function (evt) {
+			log('start in focus.');
+			inputWrap.className = 'change';
+			log('end in focus.');
+		}, false);
+		// blur event handler
+		input.addEventListener('blur', function (evt) {
+			log('start in blur.');
+			inputWrap.className = '';
+			log('end in blur.');
+		}, false);
+	})();
+	</script>
+</body>
+</html>

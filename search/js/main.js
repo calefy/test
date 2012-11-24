@@ -172,6 +172,10 @@
 					eve.cancelBubble = true;
 				}
 			}, this));
+			
+			delegateEvent(this.dom.input, 'blur', function (evt) {
+				log('in blur event handler');
+			});
 		},
 		/**
 		 * 事件处理
