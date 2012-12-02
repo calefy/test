@@ -149,7 +149,7 @@
 		_init: function () {
 			// focus中有很多操作，ios5中会失去焦点，因此改为下面方式
 			delegateEvent(this.dom.input, 'click', bind(this._ePrepareFocus, this));
-			delegateEvent(this.dom.input, 'focus', bind(this._ePrepareFocus, this));
+			//delegateEvent(this.dom.input, 'focus', bind(this._ePrepareFocus, this));
 
 			delegateEvent(this.dom.input, 'keyup', bind(this._eKeyup, this)); // 回车
 			delegateEvent(this.dom.input, 'input', bind(this._eInputChange, this)); // 内容改变
@@ -176,6 +176,9 @@
 			delegateEvent(this.dom.input, 'blur', function (evt) {
 				log('in blur event handler');
 			});
+			delegateEvent(this.dom.input, 'focus', function (evt) {
+				log('in focus event handler');
+			});
 		},
 		/**
 		 * 事件处理
@@ -195,9 +198,14 @@
 				className = wrap.className;
 			}
 			if (className.indexOf('search_onfocus') === -1) {
-				wrap.className = className + ' search_onfocus';
+				//wrap.getElementsByTagName('h1')[0].style.display = 'none';
+				//wrap.getElementsByTagName('h1')[0].style.margin= '0';
+				evt.srcElement.style.position = 'relative'
+				evt.srcElement.style.top = '-30px'
+				wrap.className = className + ' search_onfocuso';
 			}
 
+			/*
 			if (!this.getValue()) {
 				this.showList();
 				this.hideDel();
@@ -206,8 +214,9 @@
 				this.showDel();
 			}
 			this.requestNewSuggest();
+			*/
 
-			this.dom.input.focus();
+			//this.dom.input.focus();
 		},
 		_eKeyup: function (evt) {
 			evt = evt || global.event;
